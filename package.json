@@ -1,0 +1,19 @@
+{
+  "name": "covid-dashboard",
+  "version": "1.0.0",
+  "main": "server.js",
+  "keywords": ["covid", "dashboard", "visualization"],
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },  
+  "author": "Me",
+  "license": "ISC",
+  "description": "Covid data visualization with charts"
+}
