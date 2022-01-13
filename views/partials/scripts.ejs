@@ -1,0 +1,42 @@
+<script src="bootstrap.bundle.min.js"></script>
+<script src="feather.min.js"></script>
+<script src="Chart.min.js"></script>
+<script>
+    (function () {
+        'use strict'            
+        feather.replace({ 'aria-hidden': 'true' })
+        const world = JSON.parse('<%- item %>')
+        const keys = Object.keys(world[0])
+        const values = Object.values(world[0])
+        const labels = keys.filter((key, index) => index === 2 || index === 4 || index === 6)
+        const data = values.filter((key, index) => index === 2 || index === 4 || index === 6)           
+        const newData = data.map(item => Number(item.replace(/,|\+/g, "")))
+        var ctx = document.getElementById('myChart')
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [{
+                    data: newData,
+                    lineTension: 0,
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                }
+            }
+        })
+    })()
+</script>
