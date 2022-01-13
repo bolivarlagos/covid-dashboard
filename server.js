@@ -11,10 +11,19 @@ app.use(express.static(__dirname + "/public"))
 
 app.get("/", async (req, res) => {
     try {
-        const response = await axios.get(`${URL}/api/countries/`)
-        const countries = response.data  
-        res.render("index", { countries })      
+        const response = await axios.get(URL)
+        const world = response.data
+        const worldString = JSON.stringify(world)
+        res.render("index", { item: worldString })      
     } catch (error) {  
         res.render("error")      
     }               
+})
+
+app.get("/continents", (req, res) => {
+    res.render("continents")
+})
+
+app.get("/countries", (req, res) => {
+    res.render("countries")
 })

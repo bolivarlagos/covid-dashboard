@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="bootstrap.bundle.min.js" defer></script>
-    <script src="feather.min.js" defer></script>
-    <script src="Chart.min.js" defer></script>
-    <script src="dashboard.js" defer></script>
-
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"
+    >
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,13 +20,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">World</a>
+                        <a class="nav-link active" aria-current="page" href="/">World</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Continents</a>
+                        <a class="nav-link active" aria-current="page" href="/continents">Continents</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Countries</a>
+                        <a class="nav-link active" aria-current="page" href="/countries">Countries</a>
                     </li>
                 </ul>
                 <form class="d-flex">
@@ -44,12 +39,8 @@
     <main class="col-md-9 col-lg-10 px-md-4">
         <h1 class="h2">Dashboard</h1>
         <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-
         <select class="form-select" aria-label="Default select example">
             <option selected>Countries</option>
-            <% countries.map(country => { %>
-                <option> <%= country["Country Other"] %></option>
-            <% }) %>
         </select>
     </main>
     <div class="container">
@@ -64,6 +55,47 @@
             <p class="text-center text-muted">&copy; 2021 Company, Inc</p>
         </footer>
     </div>
+    <script src="bootstrap.bundle.min.js"></script>
+    <script src="feather.min.js"></script>
+    <script src="Chart.min.js"></script>
+    <script>
+        (function () {
+            'use strict'            
+            feather.replace({ 'aria-hidden': 'true' })
+            const world = JSON.parse('<%- item %>')
+            const keys = Object.keys(world[0])
+            const values = Object.values(world[0])
+            const labels = keys.filter((key, index) => index === 2 || index === 4 || index === 6)
+            const data = values.filter((key, index) => index === 2 || index === 4 || index === 6)           
+            const newData = data.map(item => Number(item.replace(/,|\+/g, "")))
+            var ctx = document.getElementById('myChart')
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        data: newData,
+                        lineTension: 0,
+                        backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#007bff'
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            })
+        })()
+    </script>
 </body>
-
 </html>
