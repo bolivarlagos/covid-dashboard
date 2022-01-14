@@ -1,8 +1,8 @@
 <main class="col-md-9 col-lg-10 px-md-4">
     <h1 class="h2">Dashboard</h1>
     <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Countries</option>
+    <select id="select-option"  class="form-select" aria-label="Default select example">
+        <option selected value="select">Select...</option>
         <% const world = JSON.parse(item) %>
         <% world.map(item => { %>
             <option value='<%= item["Country Other"]%>'><%= item["Country Other"]%></option>

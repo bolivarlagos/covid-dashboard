@@ -2,22 +2,39 @@
 <script src="feather.min.js"></script>
 <script src="Chart.min.js"></script>
 <script>
-    (function () {
-        'use strict'            
-        feather.replace({ 'aria-hidden': 'true' })
-        const world = JSON.parse('<%- item %>')
-        const keys = Object.keys(world[0])
-        const values = Object.values(world[0])
-        const labels = keys.filter((key, index) => index === 2 || index === 4 || index === 6)
-        const data = values.filter((key, index) => index === 2 || index === 4 || index === 6)           
-        const newData = data.map(item => Number(item.replace(/,|\+/g, "")))
-        var ctx = document.getElementById('myChart')
-        var myChart = new Chart(ctx, {
-            type: 'bar',
+    document.addEventListener("DOMContentLoaded", function(){
+        "use strict"
+        const selectOption = document.getElementById("select-option")
+        const myChart = document.getElementById("myChart")
+
+        feather.replace({ "aria-hidden": "true" })
+
+        const items = JSON.parse('<%- item %>')
+        const keys = Object.keys(items[0])
+        const values = Object.values(items[0])
+
+        const newLabels = []
+        const newValues = []
+
+        for(let i = 2; i < keys.length - 1; i++){
+            let currentKey = keys[i]
+            let currentValue = values[i]   
+            let newValue = 0
+
+            if(currentValue !== "No Data"){
+                newValue = Number(currentValue.replace(/,|\+/g, ""))
+            }
+
+            newLabels.push(currentKey)
+            newValues.push(newValue)
+            
+        }
+        const dummyChart = new Chart(myChart, {
+            type: "bar",
             data: {
-                labels,
+                labels: newLabels,
                 datasets: [{
-                    data: newData,
+                    data: newValues,
                     lineTension: 0,
                     backgroundColor: '#007bff',
                     borderColor: '#007bff',
@@ -29,14 +46,40 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: false
+                            beginAtZero: true
                         }
                     }]
                 },
                 legend: {
                     display: false
-                }
+                }                
             }
         })
-    })()
+
+        selectOption.addEventListener("change", e => {
+            const value = e.target.value 
+            if(value === "select"){
+                return 
+            } else {                  
+                const dataValues = dummyChart.data.datasets[0].data 
+                const wasSelected = items.filter(item => item["Country Other"] === value)
+                const valuesFromWasSelected = Object.values(wasSelected[0])
+                const newValuesFromSelectedItem = []
+
+                for(let i = 2; i < valuesFromWasSelected.length - 1; i++){
+                    let current = valuesFromWasSelected[i]
+                    let noDataValue = 0
+
+                    if(current !== "No Data"){
+                        noDataValue = Number(current.replace(/,|\+/g, ""))
+                    }
+                    newValuesFromSelectedItem.push(noDataValue)
+                }
+                for(let i = 0; i < dataValues.length; i++){
+                    dataValues[i] = newValuesFromSelectedItem[i]
+                }
+                dummyChart.update()
+            }
+        })
+    })
 </script>
