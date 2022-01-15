@@ -9,17 +9,21 @@
 
         feather.replace({ "aria-hidden": "true" })
 
-        const items = JSON.parse('<%- item %>')  
-        const keys = Object.keys(items[0]).filter(key => {
-            return key === "Total Cases" || key === "Total Deaths" || key === "Total Recovered" || key === "Total Tests" || key === "Population"
-        })
-        const values = keys.map(key => items[0][key])
-        const newValues = values.map(value => {
+        const replaceStringForNumber = value => {
             if(value === "No Data"){
                 return 0
             }
             return Number(value.replace(/,|\+/g, ""))
-        })
+        }
+
+        const getEssentialKeys = key => {
+            return key === "Total Cases" || key === "Total Deaths" || key === "Total Recovered" || key === "Total Tests" || key === "Population"
+        }
+
+        const items = JSON.parse('<%- item %>')  
+        const keys = Object.keys(items[0]).filter(getEssentialKeys)
+        const values = keys.map(key => items[0][key])
+        const newValues = values.map(replaceStringForNumber)
 
         const dummyChart = new Chart(myChart, {
             type: "bar",
@@ -53,19 +57,16 @@
             if(value === "select"){
                 return 
             } else {                  
-                let dataValues = dummyChart.data.datasets[0].data 
+                const dataValues = dummyChart.data.datasets[0].data 
                 const wasSelected = items.filter(item => item["Country Other"] === value)              
             
                 const valuesFromWasSelected = keys.map(key => wasSelected[0][key])      
-                const newValuesFromSelectedItem = valuesFromWasSelected.map(value => {
-                    if(value === "No Data"){
-                        return 0
-                    }
-                    return Number(value.replace(/,|\+/g, ""))                    
-                })
+                const newValuesFromSelectedItem = valuesFromWasSelected.map(replaceStringForNumber)
+
                 for(let i = 0; i < dataValues.length; i++){
                     dataValues[i] = newValuesFromSelectedItem[i]
                 }
+
                 dummyChart.update()
             }
         })
