@@ -9,30 +9,22 @@
 
         feather.replace({ "aria-hidden": "true" })
 
-        const items = JSON.parse('<%- item %>')
-        const keys = Object.keys(items[0])
-        const values = Object.values(items[0])
-
-        const newLabels = []
-        const newValues = []
-
-        for(let i = 2; i < keys.length - 1; i++){
-            let currentKey = keys[i]
-            let currentValue = values[i]   
-            let newValue = 0
-
-            if(currentValue !== "No Data"){
-                newValue = Number(currentValue.replace(/,|\+/g, ""))
+        const items = JSON.parse('<%- item %>')  
+        const keys = Object.keys(items[0]).filter(key => {
+            return key === "Total Cases" || key === "Total Deaths" || key === "Total Recovered" || key === "Total Tests" || key === "Population"
+        })
+        const values = keys.map(key => items[0][key])
+        const newValues = values.map(value => {
+            if(value === "No Data"){
+                return 0
             }
+            return Number(value.replace(/,|\+/g, ""))
+        })
 
-            newLabels.push(currentKey)
-            newValues.push(newValue)
-            
-        }
         const dummyChart = new Chart(myChart, {
             type: "bar",
             data: {
-                labels: newLabels,
+                labels: keys,
                 datasets: [{
                     data: newValues,
                     lineTension: 0,
@@ -61,20 +53,16 @@
             if(value === "select"){
                 return 
             } else {                  
-                const dataValues = dummyChart.data.datasets[0].data 
-                const wasSelected = items.filter(item => item["Country Other"] === value)
-                const valuesFromWasSelected = Object.values(wasSelected[0])
-                const newValuesFromSelectedItem = []
-
-                for(let i = 2; i < valuesFromWasSelected.length - 1; i++){
-                    let current = valuesFromWasSelected[i]
-                    let noDataValue = 0
-
-                    if(current !== "No Data"){
-                        noDataValue = Number(current.replace(/,|\+/g, ""))
+                let dataValues = dummyChart.data.datasets[0].data 
+                const wasSelected = items.filter(item => item["Country Other"] === value)              
+            
+                const valuesFromWasSelected = keys.map(key => wasSelected[0][key])      
+                const newValuesFromSelectedItem = valuesFromWasSelected.map(value => {
+                    if(value === "No Data"){
+                        return 0
                     }
-                    newValuesFromSelectedItem.push(noDataValue)
-                }
+                    return Number(value.replace(/,|\+/g, ""))                    
+                })
                 for(let i = 0; i < dataValues.length; i++){
                     dataValues[i] = newValuesFromSelectedItem[i]
                 }
