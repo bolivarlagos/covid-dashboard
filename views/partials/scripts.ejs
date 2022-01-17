@@ -7,7 +7,7 @@
         const selectOption = document.getElementById("select-option")
         const myChart = document.getElementById("myChart")
 
-        feather.replace({ "aria-hidden": "true" })
+        feather.replace({ "aria-hidden": "true" })        
 
         const replaceStringForNumber = value => {
             if(value === "No Data"){
@@ -25,15 +25,27 @@
         const values = keys.map(key => items[0][key])
         const newValues = values.map(replaceStringForNumber)
 
-        const dummyChart = new Chart(myChart, {
+        const chartConfig = {
             type: "bar",
             data: {
                 labels: keys,
                 datasets: [{
                     data: newValues,
                     lineTension: 0,
-                    backgroundColor: '#007bff',
-                    borderColor: '#007bff',
+                    backgroundColor: [
+                        '#ffa500',
+                        '#ff0000',
+                        '#ffff00',
+                        '#008000',
+                        '#0000ff',
+                    ],
+                    borderColor: [
+                        '#ffa500',
+                        '#ff0000',
+                        '#ffff00',
+                        '#008000',
+                        '#0000ff',
+                    ],
                     borderWidth: 4,
                     pointBackgroundColor: '#007bff'
                 }]
@@ -62,7 +74,9 @@
                     display: false
                 }                
             }
-        })
+        }
+
+        const dummyChart = new Chart(myChart, chartConfig)
 
         selectOption.addEventListener("change", e => {
             const value = e.target.value 
