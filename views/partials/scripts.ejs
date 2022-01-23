@@ -6,6 +6,20 @@
         "use strict"
         const selectOption = document.getElementById("select-option")
         const myChart = document.getElementById("myChart")
+        const backgroundColor = [
+            '#ffa500',
+            '#ff0000',
+            '#ffff00',
+            '#008000',
+            '#0000ff'
+        ]
+        const borderColor = [
+            '#ffa500',
+            '#ff0000',
+            '#ffff00',
+            '#008000',
+            '#0000ff'
+        ]
 
         feather.replace({ "aria-hidden": "true" })        
 
@@ -32,20 +46,7 @@
                 datasets: [{
                     data: newValues,
                     lineTension: 0,
-                    backgroundColor: [
-                        '#ffa500',
-                        '#ff0000',
-                        '#ffff00',
-                        '#008000',
-                        '#0000ff',
-                    ],
-                    borderColor: [
-                        '#ffa500',
-                        '#ff0000',
-                        '#ffff00',
-                        '#008000',
-                        '#0000ff',
-                    ],
+                    backgroundColor,
                     borderWidth: 4,
                     pointBackgroundColor: '#007bff'
                 }]
